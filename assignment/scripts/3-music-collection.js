@@ -3,20 +3,20 @@ console.log('***** Music Collection *****')
 let collection = [];
 
 // 'addToCollection' function to take inputs 'title', 'artist', 'yearPublished'
-function addToCollection(title, artist, yearPublished){
-    //create album with 'title', 'artist', 'yearPublished'
-    album = {title, artist, yearPublished};
-    //append object 'album' to back of 'collection' array
+function addToCollection(title, artist, yearPublished, trackName, duration){
+    //create album with 'title', 'artist', 'yearPublished', 'track'[]
+        album = {title, artist, yearPublished, tracks: [[trackName, duration]]};
     collection.push(album);
 }
 
 // Created 6 albums in collection array
-addToCollection("title1", "artist1", "2021");
+addToCollection("title1", "artist1", "2021", 'track1', '2:23');
 addToCollection("title2", "artist2", "2022");
 addToCollection("title3", "artist3", "2021");
 addToCollection("title4", "artist4", "2022");
 addToCollection("title5", "Artist1", "2021");
 addToCollection("title6", "artist1", "2023");
+addToCollection("title1", "artist1", "2021", 'track2', '3:33');
 
 console.log(collection); //Prints array
 // console.log(collection[0]); // Prints album of array[0]
@@ -28,6 +28,9 @@ function showCollection(){
     for (album of collection){
         console.log(album.title.toUpperCase(),' by ', album.artist.toUpperCase(),', published in ', album.yearPublished);
         console.log()
+        for (tracks of album.tracks){
+            console.log('Name: Duration:');
+        }
     }
 }
 
@@ -69,24 +72,48 @@ console.log('------------- BEGIN STRETCH ---------------')
 // ELSE IF no mathing items found output empty arrary
 // ELSE no 'artist' or 'year' provided for input & return all albums in 'collection'
 
-function search(artist, year){
+function search(artist, year, track){
     foundThruSearch = [];
     if (artist === undefined || year === undefined){
         return collection;
     }
-    for (let i = 0; i < collection.length; i++){
-        if (collection[i].artist.toUpperCase() === artist.toUpperCase() && collection[i].yearPublished === year){
-            //console.log('found Artist in ', collection[i].title);
-            foundThruSearch.push(collection[i]);
+    if (track === undefined){
+        for (let i = 0; i < collection.length; i++){
+            if (collection[i].artist.toUpperCase() === artist.toUpperCase() && collection[i].yearPublished === year){
+                //console.log('found Artist in ', collection[i].title);
+                foundThruSearch.push(collection[i]);
+            }
+            else {
+                //console.log('Not Found');
+            }
         }
-        else {
-            //console.log('Not Found');
-        }
-    }
         return foundThruSearch;
+    }
+    if  (track !== undefined){
+        for (let i = 0; i < collection.length; i++){
+            if (collection[i].artist.toUpperCase() === artist.toUpperCase() && collection[i].yearPublished === year){
+                for (let j = 0; j < collection[i].tracks.length; j++){
+                    console.log(collection[i].tracks[j][0]);
+                    if (track === collection[i].tracks[0][0]){
+                        console.log('Found track');
+                        return collection[i];
+                    }
+                    else {
+                        console.log('Track not found');
+                    }
+                }
+            }
+            else {
+                //console.log('Not Found');
+            }
+        }
+        //return foundThruSearch;
+    }
 }
 
 
 console.log('Expect to output title1 & title5', search('artist1', '2021'));
 console.log('Expect an empyt array:', search('appleSauce', '2022'));
 console.log('Expect a return of collection:',search());
+console.log('Expect to output title1', search('artist1', '2021','track1'));
+
