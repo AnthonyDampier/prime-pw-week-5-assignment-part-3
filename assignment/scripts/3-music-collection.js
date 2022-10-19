@@ -3,25 +3,22 @@ console.log('***** Music Collection *****')
 let collection = [];
 
 // 'addToCollection' function to take inputs 'title', 'artist', 'yearPublished'
-function addToCollection(title, artist, yearPublished, trackName, duration){
+function addToCollection(title, artist, yearPublished, tracks){
     //create album with 'title', 'artist', 'yearPublished', 'track'[]
-    album = {title, artist, yearPublished, tracks: [[trackName, duration]]};
+    tracks = tracks;
+    album = {title, artist, yearPublished, tracks};
     collection.push(album);
 }
 
 // Created 6 albums in collection array
-addToCollection("title1", "artist1", "2021", 'track1', '2:23');
-addToCollection("title2", "artist2", "2022");
-addToCollection("title3", "artist3", "2021", 'appletrack', '2:11');
-addToCollection("title4", "artist4", "2022");
+addToCollection("title1", "artist1", "2021", [['track1', '2:23'],['track2', '3:33']]);
+addToCollection("title2", "artist2", "2022", [['track55', '2:23'],['track66', '3:33'], ['track77', '4:44']]);
+addToCollection("title3", "artist3", "2021", [['appletrack', '2:11']]);
+addToCollection("title4", "artist4", "2022", [['track13', '2:23'],['track24', '3:33'], ['track35', '4:44']]);
 addToCollection("title5", "Artist1", "2021");
 addToCollection("title6", "artist1", "2023");
-addToCollection("title1", "artist1", "2021", 'track2', '3:33');
-
-testAlbum = {title: 'title4', artist: 'artist4', yearPublished: '2021', tracks: [['track1', '2:23'],['track2', '3:33'], ['track3', '4:44']]};
-
-collection.push(testAlbum);
-
+addToCollection("title1", "artist1", "2021", [['track2', '3:33']]);
+addToCollection('title4', 'artist4', '2021', [['track1', '2:23'],['track2', '3:33'], ['track3', '4:44']]);
 
 console.log(collection); //Prints array
 
@@ -30,9 +27,11 @@ function showCollection(){
     console.log('Length of collection:',collection.length);
     for (album of collection){
         console.log(album.title.toUpperCase(),' by ', album.artist.toUpperCase(),', published in ', album.yearPublished);
-        console.log()
-        for (track of album.tracks){
-            console.log('Name:', track[0],'Duration:', track[1]);
+        // Prints all tracks if there are tracks.
+        if(album.tracks!= undefined){
+            for (track of album.tracks){
+                console.log('Name:', track[0],'Duration:', track[1]);
+            }
         }
     }
 }
@@ -54,27 +53,14 @@ function findByArtist(artist){
     }
     return(artistAlbums);
 }
+
 console.log('*** findByArtist ***')
-let foundAlbums = findByArtist("artist1");
-console.log('expect the output of title1, title5 & title6:', foundAlbums);
-
-foundAlbums = findByArtist("artist99");
-console.log('expect the output of an empty array:', foundAlbums);
+console.log('expect the output of title1, title5 & title6:', findByArtist("artist1"));
+console.log('expect the output of an empty array:', findByArtist("artist99"));
 
 
-console.log('------------- BEGIN STRETCH ---------------')
+console.log('---------- BEGIN STRETCH -----------')
 //  ***STRETCH***
-
-// 'search' 
-// INPUT of 'artist' and 'year'
-
-//FUNCTION
-//// search items in 'collection matching *all* of search's criteria ('artist' & 'year') √
-
-// OUTPUT 
-// IF found items output array of items found. √
-// ELSE IF no mathing items found output empty arrary
-// ELSE no 'artist' or 'year' provided for input & return all albums in 'collection'
 
 function search(artist, year, trackName){
     foundThruSearch = [];
@@ -85,7 +71,7 @@ function search(artist, year, trackName){
     }
 
     // Search for all albums of a specific artist
-    if (trackName === undefined){
+    if (trackName === undefined ){
         for (let i = 0; i < collection.length; i++){
             if (collection[i].artist.toUpperCase() === artist.toUpperCase() && collection[i].yearPublished === year){
                 //console.log('found Artist in ', collection[i].title);
@@ -112,6 +98,17 @@ function search(artist, year, trackName){
                         return collection[i];
                     }
                 }
+                if (confirm('Do you want to add searched track?')){
+                    console.log('track add to album');
+                    // console.log(collection[i]);
+                    collection[i].tracks.push(track);
+                    // console.log(collection[i]);
+                }
+                if (album == undefined){
+
+                }
+
+                return 'NOT FOUND';
                 // track was not found in albums; add track to album
                 //console.log(collection[i].tracks.length);
             }
@@ -135,3 +132,6 @@ console.log('Expect to output title1:', search('artist1', '2021','track1'));
 console.log('Expect to output title3:', search("artist3", "2021", 'appletrack'));
 console.log('Expect to out NOT FOUND: ', search("Artist1", "2021", 'track3'));
 console.log('Expect track found in title4: ', search("Artist4", "2021", 'track2'));
+
+console.log('*** add track to album');
+console.log('Expect to out title1: ', search("Artist1", "2021", 'track3'));
